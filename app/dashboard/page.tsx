@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useState } from "react";
 
-// Static video data
+// Static video data with working Unsplash images
 const videos = [
   {
-    thumbnail: "/Node.js_logo.svg.png",
+    thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80",
     duration: "12:14",
     title: "Master React JS — Complete Beginner to Pro Course",
     channel: "Farhan Dev",
@@ -15,7 +15,7 @@ const videos = [
     verified: true,
   },
   {
-    thumbnail: "/figma.png",
+    thumbnail: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=800&q=80",
     duration: "9:27",
     title: "Minimal UI Design with Figma — Aesthetic Dashboard Tutorial",
     channel: "Zaina Studio",
@@ -24,7 +24,7 @@ const videos = [
     verified: true,
   },
   {
-    thumbnail: "/oop.png",
+    thumbnail: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=800&q=80",
     duration: "18:05",
     title: "C++ OOP Project: Build an ATM System Step-by-Step",
     channel: "Nayab Codes",
@@ -33,7 +33,7 @@ const videos = [
     verified: true,
   },
   {
-    thumbnail: "/cleancode.png",
+    thumbnail: "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?auto=format&fit=crop&w=800&q=80",
     duration: "6:41",
     title: "The Secret to Writing Clean JavaScript Code",
     channel: "Farhan Dev",
@@ -42,7 +42,7 @@ const videos = [
     verified: true,
   },
   {
-    thumbnail: "/portfolio.jpg",
+    thumbnail: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80",
     duration: "10:22",
     title: "Portfolio Website Design — Minimal Aesthetic UI in React",
     channel: "Zaina Studio",
@@ -51,7 +51,7 @@ const videos = [
     verified: true,
   },
   {
-    thumbnail: "/python.jpg",
+    thumbnail: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=800&q=80",
     duration: "15:48",
     title: "Learn Python in 2025 — Full Course for Beginners",
     channel: "Nayab Codes",
@@ -62,11 +62,9 @@ const videos = [
 ];
 
 export default function Dashboard() {
-  // Since we are now using "use client", we can use state if we want,
-  // though simple objects are still faster for static data.
   const [user] = useState({
-    name: "John Doe",
-    profilePic: "/profile.jpg",
+    name: "User", // CHANGED FROM "John Doe" TO "User"
+    profilePic: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=800&q=80",
     lastLogin: "2 days ago",
   });
 
@@ -105,7 +103,7 @@ export default function Dashboard() {
             <img
               src={user.profilePic}
               alt="Profile"
-              className="w-12 h-12 rounded-full object-cover"
+              className="w-12 h-12 rounded-full object-cover border-2 border-orange-500"
             />
             <h1 className="text-2xl md:text-4xl font-semibold text-gray-900 dark:text-gray-100">
               Welcome, {user.name}

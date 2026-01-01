@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, Suspense } from "react"; // Added Suspense
+import { useState, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation"; // Added useSearchParams
+import { useSearchParams } from "next/navigation";
 import { ThumbsUp, ThumbsDown, Share2, MoreHorizontal, Bell, User } from "lucide-react";
 
 // --- Types ---
@@ -10,7 +10,7 @@ type Video = {
   src: string;
   poster: string;
   title: string;
-  views: string; // Changed to string to handle "152K views" format from home page
+  views: string;
   uploadedAt: string;
   likes: number;
   channel: {
@@ -41,17 +41,26 @@ type RecommendedVideo = {
   uploadedAt: string;
 };
 
+// --- REAL IMAGE ASSETS ---
+const dashboardImage = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80";
+const codingImage = "https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=800&q=80";
+const reactImage = "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80";
+const laptopImage = "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80";
+const avatar1 = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80";
+const avatar2 = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80";
+const avatar3 = "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80";
+
 // --- Mock Data ---
 const defaultVideoData: Video = {
   src: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-  poster: "/sample-video-poster.jpg",
+  poster: dashboardImage, // Updated Poster
   title: "Building a YouTube Clone UI with Next.js and shadcn | Full Walkthrough",
   views: "1,234,567 views",
   uploadedAt: "2 days ago",
   likes: 54231,
   channel: {
     name: "Dev Channel",
-    avatar: "/channel-avatar-dev.jpg",
+    avatar: avatar1, // Updated Avatar
     subscribers: "1.25M",
     isSubscribed: false,
   },
@@ -59,13 +68,17 @@ const defaultVideoData: Video = {
 We cover layout, responsive design, accessibility considerations, and UI polish.`,
 };
 
+// Helper array to rotate images
+const thumbImages = [codingImage, reactImage, laptopImage, dashboardImage];
+
 const recommendedData: RecommendedVideo[] = Array.from({ length: 8 }).map((_, i) => ({
   id: `rec-${i + 1}`,
   title: i % 2 === 0 ? "Build a SaaS in 2 Hours" : "Next.js 14 Crash Course",
   channel: i % 2 === 0 ? "UI Patterns" : "Data Wizards",
   views: i % 2 === 0 ? "342K views" : "128K views",
   time: i % 2 === 0 ? "12:08" : "8:45",
-  thumbnail: `https://source.unsplash.com/random/320x180?sig=${i}`, // Using placeholder for demo
+  // Cycles through the 4 real images
+  thumbnail: thumbImages[i % thumbImages.length], 
   uploadedAt: `${Math.floor(Math.random() * 10) + 1} months ago` 
 }));
 
@@ -73,7 +86,7 @@ const initialCommentsData: Comment[] = [
   {
     id: "c1",
     author: "Jane Doe",
-    avatar: "/avatar-jane-doe.jpg",
+    avatar: avatar2, // Real Woman Avatar
     time: "1 day ago",
     text: "This was super helpful. The layout tricks for the sidebar were exactly what I needed!",
     likes: 245,
@@ -81,7 +94,7 @@ const initialCommentsData: Comment[] = [
   {
     id: "c2",
     author: "Alex Kim",
-    avatar: "/avatar-alex-kim.jpg",
+    avatar: avatar3, // Real Man Avatar
     time: "22 hours ago",
     text: "Would love a follow-up on optimizing video components and handling different aspect ratios.",
     likes: 92,
@@ -138,7 +151,8 @@ function WatchPageContent() {
               {/* Channel Info */}
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-200 dark:bg-neutral-800">
-                   <User className="h-full w-full p-2 text-gray-500" />
+                   {/* Changed to use Image tag for real avatar */}
+                   <img src={video.channel.avatar} alt={video.channel.name} className="h-full w-full object-cover" />
                 </div>
                 <div>
                   <h3 className="text-base font-semibold">{video.channel.name}</h3>
@@ -214,8 +228,9 @@ function WatchPageContent() {
             
             {/* Add Comment Input */}
             <div className="flex gap-4 mb-8">
-               <div className="h-10 w-10 shrink-0 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold">
-                 Y
+               <div className="h-10 w-10 shrink-0 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold overflow-hidden">
+                 {/* Current User Avatar */}
+                 <img src={defaultVideoData.channel.avatar} alt="Current User" className="w-full h-full object-cover" />
                </div>
                <div className="flex-1">
                  <input 
@@ -235,9 +250,7 @@ function WatchPageContent() {
               {initialComments.map((comment) => (
                 <div key={comment.id} className="flex gap-4">
                   <div className="h-10 w-10 shrink-0 rounded-full bg-gray-200 dark:bg-neutral-800 overflow-hidden">
-                    <div className="w-full h-full flex items-center justify-center bg-indigo-100 text-indigo-600 font-bold">
-                        {comment.author[0]}
-                    </div>
+                    <img src={comment.avatar} alt={comment.author} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 space-y-1">
                     <div className="flex items-center gap-2 text-sm">
@@ -278,10 +291,7 @@ function WatchPageContent() {
               <Link href="#" key={item.id} className="flex gap-3 group cursor-pointer">
                 {/* Thumbnail */}
                 <div className="relative h-24 w-40 shrink-0 overflow-hidden rounded-lg bg-gray-200 dark:bg-neutral-800">
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                     <span className="text-xs">Thumbnail</span> 
-                  </div>
-                  <img src={item.thumbnail} alt="" className="w-full h-full object-cover opacity-60" />
+                  <img src={item.thumbnail} alt="" className="w-full h-full object-cover" />
                   <span className="absolute bottom-1 right-1 rounded bg-black/80 px-1 py-0.5 text-xs font-medium text-white">
                     {item.time}
                   </span>

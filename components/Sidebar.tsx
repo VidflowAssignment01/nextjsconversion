@@ -44,7 +44,7 @@ export default function Sidebar() {
       {/* --- Section 1: Main Navigation --- */}
       <div className="p-3">
         <SidebarLink 
-          href="/home" 
+          href="/" 
           icon={Home} 
           label="Home" 
           isActive={pathname === "/"} 
